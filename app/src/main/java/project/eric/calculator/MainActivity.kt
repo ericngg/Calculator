@@ -5,29 +5,16 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import java.lang.ArithmeticException
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tvInput :TextView
+    private lateinit var btnEqual :Button
 
-    private lateinit var btnOne :Button
-    private lateinit var btnTwo :Button
-    private lateinit var btnThree :Button
-    private lateinit var btnFour :Button
-    private lateinit var btnFive :Button
-    private lateinit var btnSix :Button
-    private lateinit var btnSeven :Button
-    private lateinit var btnEight :Button
-    private lateinit var btnNine :Button
-    private lateinit var btnDecimal :Button
-    private lateinit var btnZero :Button
-    private lateinit var btnClear :Button
 
-    private lateinit var btnAdd :Button
-    private lateinit var btnSubtract :Button
-    private lateinit var btnMultiply :Button
-    private lateinit var btnDivide :Button
+
 
     var lastNumeric :Boolean = false
     var lastDot :Boolean = false
@@ -37,24 +24,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         tvInput = findViewById(R.id.tvInput)
+        btnEqual = findViewById(R.id.btnEqual)
 
-        btnOne = findViewById(R.id.btnOne)
-        btnTwo = findViewById(R.id.btnTwo)
-        btnThree = findViewById(R.id.btnThree)
-        btnFour = findViewById(R.id.btnFour)
-        btnFive = findViewById(R.id.btnFive)
-        btnSix = findViewById(R.id.btnSix)
-        btnSeven = findViewById(R.id.btnSeven)
-        btnEight = findViewById(R.id.btnEight)
-        btnNine = findViewById(R.id.btnNine)
-        btnDecimal = findViewById(R.id.btnDecimal)
-        btnZero = findViewById(R.id.btnZero)
-        btnClear = findViewById(R.id.btnClear)
 
-        btnAdd = findViewById(R.id.btnAdd)
-        btnSubtract = findViewById(R.id.btnSubtract)
-        btnMultiply = findViewById(R.id.btnMultiply)
-        btnDivide = findViewById(R.id.btnDivide)
 
 
     }
@@ -98,6 +70,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onEqual(view :View) {
+        /*
         if(lastNumeric) {
             var tvValue = tvInput.text.toString()
             var prefix = ""
@@ -160,6 +133,9 @@ class MainActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+
+         */
+        Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show()
     }
 
     private fun removeZeroAfterDot(result :String) :String {
