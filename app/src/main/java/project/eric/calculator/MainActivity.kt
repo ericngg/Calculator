@@ -68,7 +68,11 @@ class MainActivity : AppCompatActivity() {
     fun onClear(view: View) {
         // Reset input TextView
         tvInput.text = "0"
+        tvOutput.text = ""
+
+        // Reset list
         list.clear()
+        list.add("")
         index = 0
 
         // Reset Booleans
@@ -87,6 +91,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onOperator(view :View) {
+        tvOutput.text = ""
+
         var operator = (view as Button).text
         if (lastOperator) {
             tvInput.text = tvInput.text.substring(0, tvInput.text.length - 1) + operator
@@ -113,23 +119,57 @@ class MainActivity : AppCompatActivity() {
 
     private fun calculate():String {
         var equation = list.clone() as ArrayList<String>
-        // 1+2/2x2+1
-        // 012345678
-        // 1+1x2+1=3
+        // 1+2/2+1
+        // 0123456
+        // 1+1+1
+        // 01234
+        var md :Boolean = false
+        while(!md) {
+            var i = 1
+            while (i < equation.size) {
+                var total = 0.0
+                var num1 = equation[i - 1]
+                var num2 = equation[i + 1]
+                var operator = equation[i]
+
+                // skips + and -
+                if (operator == "+" || operator == "-") {
+                    i += 2
+                }
+
+                if (operator == "÷") {
+                    total = num1.toDouble() / num2.toDouble()
+                    equation.add(i + 2, "$total")
+
+                    equation.removeAt(i + 1)
+                    equation.removeAt(i)
+                    equation.removeAt(i - 1)
+
+                } else if (operator == "x") {
+                    total = num1.toDouble() * num2.toDouble()
+                    equation.add(i + 2, "$total")
+
+                    equation.removeAt(i + 1)
+                    equation.removeAt(i)
+                    equation.removeAt(i - 1)
+                }
+            }
+
+            md = true
+        }
+
+        Log.i("test", equation.toString())
+
+        // At this point, should be no multiply and divide operators
+
         while(equation.size > 1) {
             for (i in 1..equation.size step 2) {
                 var total = 0.0
                 var num1 = equation[i - 1]
                 var num2 = equation[i + 1]
                 var operator = equation[i]
-                Log.i("test", equation.toString())
-                if (operator == "÷") {
-                    total = num1.toDouble() / num2.toDouble()
-                    equation.add(i + 2, "$total")
-                } else if (operator == "x") {
-                    total = num1.toDouble() * num2.toDouble()
-                    equation.add(i + 2, "$total")
-                } else if (operator == "+") {
+
+                if (operator == "+") {
                     total = num1.toDouble() + num2.toDouble()
                     equation.add(i + 2, "$total")
                 } else if (operator == "-"){
@@ -144,76 +184,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // The whole equation should have been calculated by now and the answer will be in index 0
         return equation[0]
     }
 
     fun onEqual(view :View) {
-        /*
-        if(lastNumeric) {
-            var tvValue = tvInput.text.toString()
-            var prefix = ""
-
-            try {
-                if (tvValue.startsWith("-")) {
-                    prefix = "-"
-                    tvValue = tvValue.substring(1)
-                }
-
-
-                if (tvValue.contains("-")) {
-                    val splitValue = tvValue.split("-")
-
-                    var one = splitValue[0]
-                    var two = splitValue[1]
-
-                    if (!prefix.isEmpty()) {
-                        one = prefix + one
-                    }
-
-                    tvInput.text = removeZeroAfterDot ((one.toDouble() - two.toDouble()).toString())
-                } else if (tvValue.contains("+")) {
-                    val splitValue = tvValue.split("+")
-
-                    var one = splitValue[0]
-                    var two = splitValue[1]
-
-                    if (!prefix.isEmpty()) {
-                        one = prefix + one
-                    }
-
-                    tvInput.text = removeZeroAfterDot((one.toDouble() + two.toDouble()).toString())
-                } else if (tvValue.contains("*")) {
-                    val splitValue = tvValue.split("*")
-
-                    var one = splitValue[0]
-                    var two = splitValue[1]
-
-                    if (!prefix.isEmpty()) {
-                        one = prefix + one
-                    }
-
-                    tvInput.text = removeZeroAfterDot((one.toDouble() * two.toDouble()).toString())
-                } else if (tvValue.contains("/")) {
-                    val splitValue = tvValue.split("/")
-
-                    var one = splitValue[0]
-                    var two = splitValue[1]
-
-                    if (!prefix.isEmpty()) {
-                        one = prefix + one
-                    }
-
-                    tvInput.text = removeZeroAfterDot((one.toDouble() / two.toDouble()).toString())
-                }
-
-
-            } catch (e: ArithmeticException) {
-                e.printStackTrace()
-            }
-        }
-
-         */
-        Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show()
+        var current = tvOutput.text
+        onClear(view)
+        tvInput.text = current
+        list[0] = "$current"
     }
 
     private fun removeZeroAfterDot(result :String) :String {
