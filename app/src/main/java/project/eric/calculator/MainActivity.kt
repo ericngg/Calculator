@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     var lastNumeric :Boolean = false
     var lastDot :Boolean = false
     var lastOperator :Boolean = false
+    var lastPercent :Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,16 @@ class MainActivity : AppCompatActivity() {
 
             list[index] = "$digit"
 
+        } else if (lastPercent) {
+            index++
+            list.add("x")
+            index++
+            list.add("$digit")
+
+            lastNumeric = true
+            lastOperator = false
+            lastPercent = false
+
         } else if (lastOperator && !lastNumeric) {
             index++
 
@@ -59,6 +70,7 @@ class MainActivity : AppCompatActivity() {
 
             lastNumeric = true
             lastOperator = false
+            lastDot = false
         }
 
         onUpdateOutput()
@@ -83,6 +95,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onDecimalPoint(view: View) {
+        if (lastPercent) {
+            index++
+            list.add("x")
+            index++
+            list.add("0.")
+
+            lastPercent = false
+            lastDot = true
+        }
         if (lastNumeric && !lastDot) {
             tvInput.append(".")
             lastNumeric = false
@@ -91,6 +112,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onOperator(view :View) {
+        if (firstInput && !lastNumeric) {
+            Toast.makeText(this, "Invalid Input", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         tvOutput.text = ""
 
         var operator = (view as Button).text
@@ -106,19 +132,47 @@ class MainActivity : AppCompatActivity() {
 
             lastNumeric = false
             lastDot = false
+            lastPercent = false
+            firstInput = false
             lastOperator = true
         }
     }
 
+    fun onPercent(view :View) {
+        if (lastPercent) {
+            Toast.makeText(this, "Invalid Format", Toast.LENGTH_SHORT).show()
+        } else {
+            tvInput.append((view as Button).text)
+            list[index] = list[index] + "%"
 
-    fun onUpdateOutput() {
-        if (lastNumeric) {
-            tvOutput.text = calculate()
+            lastNumeric = false
+            lastDot = false
+            lastOperator = false
+            lastPercent = true
+
+            onUpdateOutput()
+        }
+    }
+
+
+    private fun onUpdateOutput() {
+        if (lastNumeric || lastPercent) {
+            tvOutput.text = removeZeroAfterDot(calculate())
         }
     }
 
     private fun calculate():String {
         var equation = list.clone() as ArrayList<String>
+
+        // Percents first
+        for (i in 0 until equation.size step 2) {
+            var cur = equation[i]
+            if (cur.contains("%")) {
+                var num = cur.substring(0, cur.indexOf("%"))
+                equation[i] = "" + num.toDouble() / 100
+            }
+        }
+
         // 1+2/2+1
         // 0123456
         // 1+1+1
@@ -189,10 +243,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onEqual(view :View) {
-        var current = tvOutput.text
-        onClear(view)
-        tvInput.text = current
-        list[0] = "$current"
+        if (list.size > 1) {
+            var current = tvOutput.text
+            onClear(view)
+            tvInput.text = current
+            list[0] = "$current"
+            lastNumeric = true
+        } else {
+            Toast.makeText(this, "Invalid Input", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun removeZeroAfterDot(result :String) :String {
@@ -202,5 +261,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         return value
+    }
+
+    fun wip(view: View) {
+        Toast.makeText(this, "Work in Progress", Toast.LENGTH_SHORT).show()
     }
 }

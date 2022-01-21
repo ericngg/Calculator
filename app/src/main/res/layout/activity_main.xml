@@ -51,6 +51,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/history"
             android:backgroundTint="@color/white"
+            android:onClick="wip"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,6 +63,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/ruler"
             android:backgroundTint="@color/white"
+            android:onClick="wip"
             app:layout_constraintStart_toEndOf="@+id/imageButton"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,6 +74,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/calculator"
             android:backgroundTint="@color/white"
+            android:onClick="wip"
             app:layout_constraintStart_toEndOf="@+id/imageButton2"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -82,6 +85,7 @@
             android:layout_marginEnd="30dp"
             android:background="@drawable/backspace"
             android:backgroundTint="@color/green"
+            android:onClick="wip"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -121,7 +125,7 @@
             android:textSize="30sp"
             android:textColor="@color/green"
             android:text="()"
-            android:onClick="onDigit" />
+            android:onClick="wip" />
 
         <Button
             android:id="@+id/btnPercent"
@@ -136,7 +140,7 @@
             android:textSize="30sp"
             android:textColor="@color/green"
             android:text="%"
-            android:onClick="onClear" />
+            android:onClick="onPercent" />
 
         <Button
             android:id="@+id/btnDivide"
@@ -372,7 +376,7 @@
             android:layout_marginRight="5dp"
             android:background="@drawable/round_button"
             android:textSize="25sp"
-            android:onClick="onDecimalPoint" />
+            android:onClick="wip" />
 
         <Button
             android:id="@+id/btnZero"
